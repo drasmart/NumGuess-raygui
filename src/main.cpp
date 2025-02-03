@@ -23,38 +23,51 @@ static float guiScale = 1;
 
 static int defaultTextSize;
 
-static void UpdateScale(float delta) {
-    guiScale += delta;
+static const char *title = "raygui - controls test suite";
+
+static void UpdateScale() {
     GuiSetStyle(DEFAULT, TEXT_SIZE, defaultTextSize * guiScale);
     GuiSetIconScale(static_cast<int>(guiScale));
-    if (delta) {
-        SetWindowSize(400 * guiScale, 200 * guiScale);
-    }
 
     std::stringstream ss;
-    ss << "raygui - controls test suite (" << guiScale << "x)" << std::endl;
+    ss << title << " (" << guiScale << "x)" << std::endl;
     auto const s = ss.str();
     SetWindowTitle(s.c_str());
 }
 
 int main()
 {
+    const Vector2 modelSize { 500, 300 };
     guiScale = 3;
 
-    InitWindow(400 * guiScale, 200 * guiScale, "raygui - controls test suite");
+    Vector2 lastScreenSize {
+        modelSize.x * guiScale,
+        modelSize.y * guiScale,
+    };
+
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(lastScreenSize.x, lastScreenSize.y, title);
+
     SetTargetFPS(60);
 
     defaultTextSize = GuiGetStyle(DEFAULT, TEXT_SIZE);
-    UpdateScale(0);
+    UpdateScale();
 
     UI::Root root;
 
     while (!WindowShouldClose())
     {
-        if (IsKeyPressed(KEY_KP_ADD)) {
-            UpdateScale(+0.5);
-        } else if (IsKeyPressed(KEY_KP_SUBTRACT) && guiScale > 1) {
-            UpdateScale(-0.5);
+        const Vector2 newScreenSize {
+            static_cast<float>(GetScreenWidth()),
+            static_cast<float>(GetScreenHeight()),
+        };
+        if (lastScreenSize.x != newScreenSize.x || lastScreenSize.y != newScreenSize.y) {
+            const Vector2 scale {
+                newScreenSize.x / modelSize.x,
+                newScreenSize.y / modelSize.y,
+            };
+            guiScale = (scale.x < scale.y) ? scale.x : scale.y;
+            UpdateScale();
         }
 
         // Draw
@@ -63,7 +76,12 @@ int main()
         ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
 
         root.drawAt({
-            { 0, 0, 0, 0},
+            {
+                0,
+                0,
+                newScreenSize.x / guiScale,
+                newScreenSize.y / guiScale,
+            },
             guiScale,
         });
 
