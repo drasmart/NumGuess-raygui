@@ -9,30 +9,30 @@
 
 namespace UI {
 
-static void drawHalfSizeRects(const DrawArea &drawArea) {
+static void drawHalfSizeRects(const DrawRequest &drawRequest) {
     DrawRectangle(
-        drawArea.rectangle.x * drawArea.scale,
-        drawArea.rectangle.y * drawArea.scale,
-        drawArea.rectangle.width / 2 * drawArea.scale,
-        drawArea.rectangle.height / 2 * drawArea.scale,
+        drawRequest.rectangle.x * drawRequest.scale(),
+        drawRequest.rectangle.y * drawRequest.scale(),
+        drawRequest.rectangle.width / 2 * drawRequest.scale(),
+        drawRequest.rectangle.height / 2 * drawRequest.scale(),
         Color(255, 0, 0, 64));
     DrawRectangle(
-        (drawArea.rectangle.x + drawArea.rectangle.width / 2) * drawArea.scale,
-        (drawArea.rectangle.y + drawArea.rectangle.height / 2) * drawArea.scale,
-        drawArea.rectangle.width / 2 * drawArea.scale,
-        drawArea.rectangle.height / 2 * drawArea.scale,
+        (drawRequest.rectangle.x + drawRequest.rectangle.width / 2) * drawRequest.scale(),
+        (drawRequest.rectangle.y + drawRequest.rectangle.height / 2) * drawRequest.scale(),
+        drawRequest.rectangle.width / 2 * drawRequest.scale(),
+        drawRequest.rectangle.height / 2 * drawRequest.scale(),
         Color(0, 0, 255, 64));
 }
 
-static void drawSizeLabel(const DrawArea &drawArea) {
+static void drawSizeLabel(const DrawRequest &drawRequest) {
     std::stringstream ss;
     ss
     << "( "
-    << drawArea.rectangle.width
+    << drawRequest.rectangle.width
     << " , "
-    << drawArea.rectangle.height
+    << drawRequest.rectangle.height
     << " ) @ "
-    << drawArea.scale
+    << drawRequest.scale()
     << "x";
     const std::string s = ss.str();
     const Font font = GetFontDefault();
@@ -41,28 +41,28 @@ static void drawSizeLabel(const DrawArea &drawArea) {
         s.c_str(),
         (float)GuiGetStyle(DEFAULT, TEXT_SIZE),
         (float)GuiGetStyle(DEFAULT, TEXT_SPACING));
-    const float padding = (int)drawArea.scale + 1;
+    const float padding = (int)drawRequest.scale() + 1;
     const Vector2 textSize {
-        textSizeRaw.x / drawArea.scale + padding,
-        textSizeRaw.y / drawArea.scale + padding,
+        textSizeRaw.x / drawRequest.scale() + padding,
+        textSizeRaw.y / drawRequest.scale() + padding,
     };
     const Rectangle labelRect {
-        drawArea.rectangle.x + drawArea.rectangle.width - textSize.x,
-        drawArea.rectangle.y + drawArea.rectangle.height - textSize.y,
+        drawRequest.rectangle.x + drawRequest.rectangle.width - textSize.x,
+        drawRequest.rectangle.y + drawRequest.rectangle.height - textSize.y,
         textSize.x,
         textSize.y,
     };
     GuiLabel((Rectangle){
-        labelRect.x * drawArea.scale,
-        labelRect.y * drawArea.scale,
-        labelRect.width * drawArea.scale,
-        labelRect.height * drawArea.scale,
+        labelRect.x * drawRequest.scale(),
+        labelRect.y * drawRequest.scale(),
+        labelRect.width * drawRequest.scale(),
+        labelRect.height * drawRequest.scale(),
     }, s.c_str());
 }
 
-void AimReticle::drawAt(const DrawArea &drawArea) {
-    drawHalfSizeRects(drawArea);
-    drawSizeLabel(drawArea);
+void AimReticle::drawAt(const DrawRequest &drawRequest) {
+    drawHalfSizeRects(drawRequest);
+    drawSizeLabel(drawRequest);
 }
 
 } // UI

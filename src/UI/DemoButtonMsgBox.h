@@ -11,7 +11,7 @@ namespace UI {
 
 struct  DemoButtonMsgBox : IDrawable {
     bool showMessageBox = false;
-    void drawAt(const DrawArea &drawArea) override;
+    void drawAt(const DrawRequest &drawRequest) override;
 };
 
 } // UI

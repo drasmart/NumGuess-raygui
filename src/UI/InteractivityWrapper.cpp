@@ -11,7 +11,7 @@ namespace UI {
 InteractivityWrapper::InteractivityWrapper(IDrawable* drawable, bool interactable)
     : drawable(drawable), interactable(interactable) {}
 
-void InteractivityWrapper::drawAt(const DrawArea &drawArea) {
+void InteractivityWrapper::drawAt(const DrawRequest &drawRequest) {
     const bool globalInteractable = !GuiIsLocked();
     if (globalInteractable != interactable) {
         if (interactable) {
@@ -20,7 +20,7 @@ void InteractivityWrapper::drawAt(const DrawArea &drawArea) {
             GuiLock();
         }
     }
-    drawable->drawAt(drawArea.child("int-boxed", drawArea.rectangle));
+    drawable->drawAt(drawRequest.child("int-boxed", drawRequest.rectangle));
     if (globalInteractable != interactable) {
         if (globalInteractable) {
             GuiUnlock();

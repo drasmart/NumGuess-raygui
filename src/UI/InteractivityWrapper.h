@@ -14,7 +14,7 @@ class InteractivityWrapper : public IDrawable {
     bool interactable;
 public:
     InteractivityWrapper(IDrawable* drawable, bool interactable);
-    void drawAt(const DrawArea &drawArea) override;
+    void drawAt(const DrawRequest &drawRequest) override;
 };
 
 } // UI

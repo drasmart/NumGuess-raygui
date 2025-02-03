@@ -37,6 +37,9 @@ int main()
     UpdateScale();
 
     UI::Root root;
+    UI::Context context {
+        .scale = UI::GuiScale::guiScale,
+    };
 
     while (!WindowShouldClose())
     {
@@ -49,7 +52,7 @@ int main()
                 newScreenSize.x / modelSize.x,
                 newScreenSize.y / modelSize.y,
             };
-            UI::GuiScale::guiScale = (scale.x < scale.y) ? scale.x : scale.y;
+            context.scale = UI::GuiScale::guiScale = (scale.x < scale.y) ? scale.x : scale.y;
             UpdateScale();
         }
 
@@ -65,9 +68,9 @@ int main()
                 newScreenSize.x / UI::GuiScale::guiScale,
                 newScreenSize.y / UI::GuiScale::guiScale,
             },
-            UI::GuiScale::guiScale,
-            std::nullopt,
             "root",
+            nullptr,
+            &context,
         });
 
         EndDrawing();

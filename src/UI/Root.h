@@ -16,10 +16,10 @@ struct Root : IDrawable {
     Vector2 scroll { 0, 0 };
     Vector2 scroll2 { -50, -180 };
 
-    void drawAt(const DrawArea &drawArea) override;
+    void drawAt(const DrawRequest &drawRequest) override;
 private:
-    void drawScrollPanel(const DrawArea &drawArea);
-    void drawScrollPanel2(const DrawArea &drawArea);
+    void drawScrollPanel(const DrawRequest &drawRequest);
+    void drawScrollPanel2(const DrawRequest &drawRequest);
 };
 
 } // UI

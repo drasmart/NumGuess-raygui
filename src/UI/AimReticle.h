@@ -10,7 +10,7 @@
 namespace UI {
 
 struct AimReticle : IDrawable {
-    void drawAt(const DrawArea &drawArea) override;
+    void drawAt(const DrawRequest &drawRequest) override;
 };
 
 } // UI

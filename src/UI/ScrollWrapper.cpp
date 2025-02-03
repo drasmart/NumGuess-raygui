@@ -15,21 +15,21 @@ ScrollWrapper::ScrollWrapper(const char *title, IDrawable *content, const Vector
     offset(offset)
     {}
 
-void ScrollWrapper::drawAt(const DrawArea &drawArea) {
+void ScrollWrapper::drawAt(const DrawRequest &drawRequest) {
     Rectangle view;
 
     GuiScrollPanel({
-            drawArea.rectangle.x * drawArea.scale,
-            drawArea.rectangle.y * drawArea.scale,
-            drawArea.rectangle.width * drawArea.scale,
-            drawArea.rectangle.height * drawArea.scale,
+            drawRequest.rectangle.x * drawRequest.scale(),
+            drawRequest.rectangle.y * drawRequest.scale(),
+            drawRequest.rectangle.width * drawRequest.scale(),
+            drawRequest.rectangle.height * drawRequest.scale(),
         },
     title,
 {
-        drawArea.rectangle.x * drawArea.scale,
-        drawArea.rectangle.y * drawArea.scale,
-        size.x * drawArea.scale,
-        size.y * drawArea.scale,
+        drawRequest.rectangle.x * drawRequest.scale(),
+        drawRequest.rectangle.y * drawRequest.scale(),
+        size.x * drawRequest.scale(),
+        size.y * drawRequest.scale(),
     },
     &offset,
     &view
@@ -41,9 +41,9 @@ void ScrollWrapper::drawAt(const DrawArea &drawArea) {
         view.width,
         view.height);
 
-    content->drawAt(drawArea.child("scroll-boxed", {
-        (view.x + offset.x) / drawArea.scale,
-        (view.y + offset.y) / drawArea.scale,
+    content->drawAt(drawRequest.child("scroll-boxed", {
+        (view.x + offset.x) / drawRequest.scale(),
+        (view.y + offset.y) / drawRequest.scale(),
         size.x,
         size.y,
     }));
