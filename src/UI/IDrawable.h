@@ -14,7 +14,7 @@ struct IDrawable {
     virtual void drawAt(const DrawArea &drawArea) = 0;
     virtual ~IDrawable();
 
-    std::unique_ptr<IDrawable> scrollable(const Vector2 &size, Vector2 &offset);
+    std::unique_ptr<IDrawable> scrollable(const char *title, const Vector2 &size, Vector2 &offset);
     std::unique_ptr<IDrawable> interactable(bool interactable);
 };
 

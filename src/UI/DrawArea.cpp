@@ -23,24 +23,19 @@ DrawArea DrawArea::child(
     };
 }
 
-static void dumpIds(const DrawArea *drawArea, std::stringstream &ss) {
-    if (drawArea->parent) {
-        dumpIds(drawArea->parent, ss);
+void DrawArea::dumpIds(std::ostream &ss) const {
+    if (parent) {
+        parent->dumpIds(ss);
+        ss << '.';
     }
-    if (!drawArea->id) {
+    if (!id) {
         return;
     }
-    ss << '.';
-    if (drawArea->id->index()) {
-        ss << std::get<1>(*drawArea->id);
+    if (id->index()) {
+        ss << std::get<1>(*id);
     } else {
-        ss << std::get<0>(*drawArea->id);
+        ss << std::get<0>(*id);
     }
-}
-
-std::string DrawArea::buildFullID() const {
-    std::stringstream ss;
-    dumpIds(this, ss);
 }
 
 } // UI

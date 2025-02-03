@@ -8,7 +8,8 @@
 
 namespace UI {
 
-ScrollWrapper::ScrollWrapper(IDrawable *content, const Vector2 &size, Vector2 &offset):
+ScrollWrapper::ScrollWrapper(const char *title, IDrawable *content, const Vector2 &size, Vector2 &offset):
+    title(title),
     content(content),
     size(size),
     offset(offset)
@@ -23,7 +24,7 @@ void ScrollWrapper::drawAt(const DrawArea &drawArea) {
             drawArea.rectangle.width * drawArea.scale,
             drawArea.rectangle.height * drawArea.scale,
         },
-    "SCROLL AREA",
+    title,
 {
         drawArea.rectangle.x * drawArea.scale,
         drawArea.rectangle.y * drawArea.scale,
@@ -34,21 +35,13 @@ void ScrollWrapper::drawAt(const DrawArea &drawArea) {
     &view
     );
 
-    DrawRectangle(
-        view.x,
-        view.y,
-        view.width,
-        view.height,
-        Color(255, 255, 0, 255)
-        );
-
     BeginScissorMode(
         view.x,
         view.y,
         view.width,
         view.height);
 
-    content->drawAt(drawArea.child("v", {
+    content->drawAt(drawArea.child("scroll-boxed", {
         (view.x + offset.x) / drawArea.scale,
         (view.y + offset.y) / drawArea.scale,
         size.x,

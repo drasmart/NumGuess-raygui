@@ -13,9 +13,10 @@ class ScrollWrapper : public IDrawable {
     IDrawable *content;
     const Vector2 &size;
     Vector2 &offset;
+    const char *title;
 
 public:
-    ScrollWrapper(IDrawable *content, const Vector2 &size, Vector2 &offset);
+    ScrollWrapper(const char *title, IDrawable *content, const Vector2 &size, Vector2 &offset);
 
     void drawAt(const DrawArea &drawArea) override;
 };

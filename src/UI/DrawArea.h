@@ -26,7 +26,7 @@ struct DrawArea {
         Rectangle rect,
         const std::optional<Rectangle> &newClipArea = std::nullopt) const;
 
-    std::string buildFullID() const;
+    void dumpIds(std::ostream &ss) const;
 };
 
 } // UI

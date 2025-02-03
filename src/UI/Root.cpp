@@ -11,13 +11,13 @@ namespace UI {
 
 void Root::drawScrollPanel(const DrawArea &drawArea) {
 
-    AimReticle().scrollable(
+    demoBox2.scrollable("SCROLL AREA",
         {
             drawArea.rectangle.width,
             drawArea.rectangle.height,
         },
         scroll)
-    ->drawAt( drawArea.child("sp", {
+    ->drawAt( drawArea.child("scroll-panel", {
         drawArea.rectangle.x + drawArea.rectangle.width / 2,
         drawArea.rectangle.y,
         drawArea.rectangle.width / 2,
@@ -27,14 +27,14 @@ void Root::drawScrollPanel(const DrawArea &drawArea) {
 
 void Root::drawScrollPanel2(const DrawArea &drawArea) {
 
-    AimReticle().scrollable(
+    AimReticle().scrollable("SCROLL AREA 2",
         {
             drawArea.rectangle.width / 4,
             drawArea.rectangle.height,
         },
         scroll2)
     ->interactable(false)
-    ->drawAt( drawArea.child("sp2", {
+    ->drawAt( drawArea.child("scroll-panel-2", {
         drawArea.rectangle.x + drawArea.rectangle.width * 5 / 8,
         drawArea.rectangle.y + drawArea.rectangle.height / 4,
         drawArea.rectangle.width / 4,
@@ -45,26 +45,7 @@ void Root::drawScrollPanel2(const DrawArea &drawArea) {
 void Root::drawAt(const DrawArea &drawArea) {
     drawScrollPanel(drawArea);
     drawScrollPanel2(drawArea);
-
-    if (GuiButton((Rectangle){
-        24 * drawArea.scale,
-        24* drawArea.scale,
-        120 * drawArea.scale,
-        30 * drawArea.scale,
-    }, "#191#Show Message")) showMessageBox = true;
-
-    if (showMessageBox)
-    {
-        int result = GuiMessageBox((Rectangle){
-            85 * drawArea.scale,
-            70 * drawArea.scale,
-            250 * drawArea.scale,
-            100 * drawArea.scale,
-        },
-            "#191#Message Box", "Hi! This is a message!", "Nice;Cool");
-
-        if (result >= 0) showMessageBox = false;
-    }
+    demoBox1.drawAt(drawArea);
 }
 
 } // UI
