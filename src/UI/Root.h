@@ -5,14 +5,17 @@
 #ifndef ROOT_H
 #define ROOT_H
 
-#include "ScaledRectangle.h"
+#include "IDrawable.h"
 
 namespace UI {
 
-struct Root {
+struct Root : IDrawable {
     bool showMessageBox = false;
+    Vector2 scroll { 0, 0 };
 
-    void drawAt(ScaledRectangle rectangle);
+    void drawAt(const ScaledRectangle &rectangle) override;
+private:
+    void drawScrollPanel(const ScaledRectangle &rectangle);
 };
 
 } // UI

@@ -21,12 +21,16 @@ static float guiScale = 1;
 
 #include <sstream>
 
-static int defaultTextSize;
+static struct {
+    int textSize;
+    int scrollBarWidth;
+} defaultStyle;
 
 static const char *title = "raygui - controls test suite";
 
 static void UpdateScale() {
-    GuiSetStyle(DEFAULT, TEXT_SIZE, defaultTextSize * guiScale);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, defaultStyle.textSize * guiScale);
+    GuiSetStyle(DEFAULT, SCROLLBAR_WIDTH, defaultStyle.scrollBarWidth * guiScale);
     GuiSetIconScale(static_cast<int>(guiScale));
 
     std::stringstream ss;
@@ -50,7 +54,10 @@ int main()
 
     SetTargetFPS(60);
 
-    defaultTextSize = GuiGetStyle(DEFAULT, TEXT_SIZE);
+    defaultStyle = {
+        .textSize = GuiGetStyle(DEFAULT, TEXT_SIZE),
+        .scrollBarWidth = GuiGetStyle(DEFAULT, SCROLLBAR_WIDTH),
+    };
     UpdateScale();
 
     UI::Root root;
