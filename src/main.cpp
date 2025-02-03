@@ -66,6 +66,8 @@ int main()
                 newScreenSize.y / UI::GuiScale::guiScale,
             },
             UI::GuiScale::guiScale,
+            std::nullopt,
+            "root",
         });
 
         EndDrawing();

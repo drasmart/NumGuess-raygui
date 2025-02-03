@@ -20,7 +20,7 @@ void InteractivityWrapper::drawAt(const DrawArea &drawArea) {
             GuiLock();
         }
     }
-    drawable->drawAt(drawArea);
+    drawable->drawAt(drawArea.child("x", drawArea.rectangle));
     if (globalInteractable != interactable) {
         if (globalInteractable) {
             GuiUnlock();

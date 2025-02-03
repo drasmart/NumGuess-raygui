@@ -17,15 +17,12 @@ void Root::drawScrollPanel(const DrawArea &drawArea) {
             drawArea.rectangle.height,
         },
         scroll)
-    ->drawAt( {
-        {
-            drawArea.rectangle.x + drawArea.rectangle.width / 2,
-            drawArea.rectangle.y,
-            drawArea.rectangle.width / 2,
-            drawArea.rectangle.height,
-        },
-        drawArea.scale,
-    });
+    ->drawAt( drawArea.child("sp", {
+        drawArea.rectangle.x + drawArea.rectangle.width / 2,
+        drawArea.rectangle.y,
+        drawArea.rectangle.width / 2,
+        drawArea.rectangle.height,
+    }));
 }
 
 void Root::drawScrollPanel2(const DrawArea &drawArea) {
@@ -37,15 +34,12 @@ void Root::drawScrollPanel2(const DrawArea &drawArea) {
         },
         scroll2)
     ->interactable(false)
-    ->drawAt( {
-        {
-            drawArea.rectangle.x + drawArea.rectangle.width * 5 / 8,
-            drawArea.rectangle.y + drawArea.rectangle.height / 4,
-            drawArea.rectangle.width / 4,
-            drawArea.rectangle.height / 2,
-        },
-        drawArea.scale,
-    });
+    ->drawAt( drawArea.child("sp2", {
+        drawArea.rectangle.x + drawArea.rectangle.width * 5 / 8,
+        drawArea.rectangle.y + drawArea.rectangle.height / 4,
+        drawArea.rectangle.width / 4,
+        drawArea.rectangle.height / 2,
+    }));
 }
 
 void Root::drawAt(const DrawArea &drawArea) {

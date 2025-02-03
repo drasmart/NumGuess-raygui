@@ -48,15 +48,12 @@ void ScrollWrapper::drawAt(const DrawArea &drawArea) {
         view.width,
         view.height);
 
-    content->drawAt({
-        .rectangle = {
-            (view.x + offset.x) / drawArea.scale,
-            (view.y + offset.y) / drawArea.scale,
-            size.x,
-            size.y,
-        },
-        .scale = drawArea.scale,
-    });
+    content->drawAt(drawArea.child("v", {
+        (view.x + offset.x) / drawArea.scale,
+        (view.y + offset.y) / drawArea.scale,
+        size.x,
+        size.y,
+    }));
 
     EndScissorMode();
 }
