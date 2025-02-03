@@ -6,12 +6,14 @@
 #define SCALEDRECTANGLE_H
 
 #include "raylib.h"
+#include <optional>
 
 namespace UI {
 
-struct ScaledRectangle {
+struct DrawArea {
     Rectangle rectangle;
     float scale = 1;
+    std::optional<Rectangle> clipArea;
 };
 
 } // UI

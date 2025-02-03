@@ -9,30 +9,30 @@
 
 namespace UI {
 
-static void drawHalfSizeRects(const ScaledRectangle &rectangle) {
+static void drawHalfSizeRects(const DrawArea &drawArea) {
     DrawRectangle(
-        rectangle.rectangle.x * rectangle.scale,
-        rectangle.rectangle.y * rectangle.scale,
-        rectangle.rectangle.width / 2 * rectangle.scale,
-        rectangle.rectangle.height / 2 * rectangle.scale,
+        drawArea.rectangle.x * drawArea.scale,
+        drawArea.rectangle.y * drawArea.scale,
+        drawArea.rectangle.width / 2 * drawArea.scale,
+        drawArea.rectangle.height / 2 * drawArea.scale,
         Color(255, 0, 0, 64));
     DrawRectangle(
-        (rectangle.rectangle.x + rectangle.rectangle.width / 2) * rectangle.scale,
-        (rectangle.rectangle.y + rectangle.rectangle.height / 2) * rectangle.scale,
-        rectangle.rectangle.width / 2 * rectangle.scale,
-        rectangle.rectangle.height / 2 * rectangle.scale,
+        (drawArea.rectangle.x + drawArea.rectangle.width / 2) * drawArea.scale,
+        (drawArea.rectangle.y + drawArea.rectangle.height / 2) * drawArea.scale,
+        drawArea.rectangle.width / 2 * drawArea.scale,
+        drawArea.rectangle.height / 2 * drawArea.scale,
         Color(0, 0, 255, 64));
 }
 
-static void drawSizeLabel(const ScaledRectangle &rectangle) {
+static void drawSizeLabel(const DrawArea &drawArea) {
     std::stringstream ss;
     ss
     << "( "
-    << rectangle.rectangle.width
+    << drawArea.rectangle.width
     << " , "
-    << rectangle.rectangle.height
+    << drawArea.rectangle.height
     << " ) @ "
-    << rectangle.scale
+    << drawArea.scale
     << "x";
     const std::string s = ss.str();
     const Font font = GetFontDefault();
@@ -41,28 +41,28 @@ static void drawSizeLabel(const ScaledRectangle &rectangle) {
         s.c_str(),
         (float)GuiGetStyle(DEFAULT, TEXT_SIZE),
         (float)GuiGetStyle(DEFAULT, TEXT_SPACING));
-    const float padding = (int)rectangle.scale + 1;
+    const float padding = (int)drawArea.scale + 1;
     const Vector2 textSize {
-        textSizeRaw.x / rectangle.scale + padding,
-        textSizeRaw.y / rectangle.scale + padding,
+        textSizeRaw.x / drawArea.scale + padding,
+        textSizeRaw.y / drawArea.scale + padding,
     };
     const Rectangle labelRect {
-        rectangle.rectangle.x + rectangle.rectangle.width - textSize.x,
-        rectangle.rectangle.y + rectangle.rectangle.height - textSize.y,
+        drawArea.rectangle.x + drawArea.rectangle.width - textSize.x,
+        drawArea.rectangle.y + drawArea.rectangle.height - textSize.y,
         textSize.x,
         textSize.y,
     };
     GuiLabel((Rectangle){
-        labelRect.x * rectangle.scale,
-        labelRect.y * rectangle.scale,
-        labelRect.width * rectangle.scale,
-        labelRect.height * rectangle.scale,
+        labelRect.x * drawArea.scale,
+        labelRect.y * drawArea.scale,
+        labelRect.width * drawArea.scale,
+        labelRect.height * drawArea.scale,
     }, s.c_str());
 }
 
-void AimReticle::drawAt(const ScaledRectangle &rectangle) {
-    drawHalfSizeRects(rectangle);
-    drawSizeLabel(rectangle);
+void AimReticle::drawAt(const DrawArea &drawArea) {
+    drawHalfSizeRects(drawArea);
+    drawSizeLabel(drawArea);
 }
 
 } // UI

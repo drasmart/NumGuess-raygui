@@ -9,22 +9,22 @@
 
 namespace UI {
 
-void Root::drawScrollPanel(const ScaledRectangle &rectangle) {
+void Root::drawScrollPanel(const DrawArea &drawArea) {
 
     Rectangle view;
 
     GuiScrollPanel({
-            (rectangle.rectangle.x + rectangle.rectangle.width / 2) * rectangle.scale,
-            (rectangle.rectangle.y) * rectangle.scale,
-            (rectangle.rectangle.width / 2) * rectangle.scale,
-            (rectangle.rectangle.height) * rectangle.scale,
+            (drawArea.rectangle.x + drawArea.rectangle.width / 2) * drawArea.scale,
+            (drawArea.rectangle.y) * drawArea.scale,
+            (drawArea.rectangle.width / 2) * drawArea.scale,
+            (drawArea.rectangle.height) * drawArea.scale,
         },
     "SCROLL AREA",
 {
-        rectangle.rectangle.x * rectangle.scale,
-        rectangle.rectangle.y * rectangle.scale,
-        rectangle.rectangle.width * rectangle.scale,
-        rectangle.rectangle.height * rectangle.scale,
+        drawArea.rectangle.x * drawArea.scale,
+        drawArea.rectangle.y * drawArea.scale,
+        drawArea.rectangle.width * drawArea.scale,
+        drawArea.rectangle.height * drawArea.scale,
     },
     &scroll,
     &view
@@ -46,34 +46,34 @@ void Root::drawScrollPanel(const ScaledRectangle &rectangle) {
 
     AimReticle().drawAt({
         .rectangle = {
-            (view.x + scroll.x) / rectangle.scale,
-            (view.y + scroll.y) / rectangle.scale,
-            rectangle.rectangle.width,
-            rectangle.rectangle.height,
+            (view.x + scroll.x) / drawArea.scale,
+            (view.y + scroll.y) / drawArea.scale,
+            drawArea.rectangle.width,
+            drawArea.rectangle.height,
         },
-        .scale = rectangle.scale,
+        .scale = drawArea.scale,
     });
 
     EndScissorMode();
 }
 
-void Root::drawAt(const ScaledRectangle &rectangle) {
-    drawScrollPanel(rectangle);
+void Root::drawAt(const DrawArea &drawArea) {
+    drawScrollPanel(drawArea);
 
     if (GuiButton((Rectangle){
-        24 * rectangle.scale,
-        24* rectangle.scale,
-        120 * rectangle.scale,
-        30 * rectangle.scale,
+        24 * drawArea.scale,
+        24* drawArea.scale,
+        120 * drawArea.scale,
+        30 * drawArea.scale,
     }, "#191#Show Message")) showMessageBox = true;
 
     if (showMessageBox)
     {
         int result = GuiMessageBox((Rectangle){
-            85 * rectangle.scale,
-            70 * rectangle.scale,
-            250 * rectangle.scale,
-            100 * rectangle.scale,
+            85 * drawArea.scale,
+            70 * drawArea.scale,
+            250 * drawArea.scale,
+            100 * drawArea.scale,
         },
             "#191#Message Box", "Hi! This is a message!", "Nice;Cool");
 

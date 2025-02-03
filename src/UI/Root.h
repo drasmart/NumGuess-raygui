@@ -13,9 +13,9 @@ struct Root : IDrawable {
     bool showMessageBox = false;
     Vector2 scroll { 0, 0 };
 
-    void drawAt(const ScaledRectangle &rectangle) override;
+    void drawAt(const DrawArea &drawArea) override;
 private:
-    void drawScrollPanel(const ScaledRectangle &rectangle);
+    void drawScrollPanel(const DrawArea &drawArea);
 };
 
 } // UI

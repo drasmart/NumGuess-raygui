@@ -5,12 +5,12 @@
 #ifndef IDRAWABLE_H
 #define IDRAWABLE_H
 
-#include "ScaledRectangle.h"
+#include "DrawArea.h"
 
 namespace UI {
 
     struct IDrawable {
-        virtual void drawAt(const ScaledRectangle &rectangle) = 0;
+        virtual void drawAt(const DrawArea &drawArea) = 0;
     };
 
 } // UI
