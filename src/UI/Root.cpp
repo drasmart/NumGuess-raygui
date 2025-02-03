@@ -36,6 +36,7 @@ void Root::drawScrollPanel2(const DrawArea &drawArea) {
             drawArea.rectangle.height,
         },
         scroll2)
+    ->interactable(false)
     ->drawAt( {
         {
             drawArea.rectangle.x + drawArea.rectangle.width * 5 / 8,
