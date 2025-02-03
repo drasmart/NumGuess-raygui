@@ -10,6 +10,7 @@
 namespace UI {
 
 void Root::drawScrollPanel(const DrawArea &drawArea) {
+
     AimReticle().scrollable(
         {
             drawArea.rectangle.width,
@@ -27,8 +28,28 @@ void Root::drawScrollPanel(const DrawArea &drawArea) {
     });
 }
 
+void Root::drawScrollPanel2(const DrawArea &drawArea) {
+
+    AimReticle().scrollable(
+        {
+            drawArea.rectangle.width / 4,
+            drawArea.rectangle.height,
+        },
+        scroll2)
+    ->drawAt( {
+        {
+            drawArea.rectangle.x + drawArea.rectangle.width * 5 / 8,
+            drawArea.rectangle.y + drawArea.rectangle.height / 4,
+            drawArea.rectangle.width / 4,
+            drawArea.rectangle.height / 2,
+        },
+        drawArea.scale,
+    });
+}
+
 void Root::drawAt(const DrawArea &drawArea) {
     drawScrollPanel(drawArea);
+    drawScrollPanel2(drawArea);
 
     if (GuiButton((Rectangle){
         24 * drawArea.scale,

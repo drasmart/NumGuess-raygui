@@ -12,10 +12,12 @@ namespace UI {
 struct Root : IDrawable {
     bool showMessageBox = false;
     Vector2 scroll { 0, 0 };
+    Vector2 scroll2 { 0, 0 };
 
     void drawAt(const DrawArea &drawArea) override;
 private:
     void drawScrollPanel(const DrawArea &drawArea);
+    void drawScrollPanel2(const DrawArea &drawArea);
 };
 
 } // UI
