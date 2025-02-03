@@ -6,12 +6,16 @@
 #define IDRAWABLE_H
 
 #include "DrawArea.h"
+#include <memory>
 
 namespace UI {
 
-    struct IDrawable {
-        virtual void drawAt(const DrawArea &drawArea) = 0;
-    };
+struct IDrawable {
+    virtual void drawAt(const DrawArea &drawArea) = 0;
+    virtual ~IDrawable();
+
+    std::unique_ptr<IDrawable> scrollable(const Vector2 &size, Vector2 &offset);
+};
 
 } // UI
 

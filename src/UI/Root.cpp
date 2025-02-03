@@ -10,51 +10,21 @@
 namespace UI {
 
 void Root::drawScrollPanel(const DrawArea &drawArea) {
-
-    Rectangle view;
-
-    GuiScrollPanel({
-            (drawArea.rectangle.x + drawArea.rectangle.width / 2) * drawArea.scale,
-            (drawArea.rectangle.y) * drawArea.scale,
-            (drawArea.rectangle.width / 2) * drawArea.scale,
-            (drawArea.rectangle.height) * drawArea.scale,
-        },
-    "SCROLL AREA",
-{
-        drawArea.rectangle.x * drawArea.scale,
-        drawArea.rectangle.y * drawArea.scale,
-        drawArea.rectangle.width * drawArea.scale,
-        drawArea.rectangle.height * drawArea.scale,
-    },
-    &scroll,
-    &view
-    );
-
-    DrawRectangle(
-        view.x,
-        view.y,
-        view.width,
-        view.height,
-        Color(255, 255, 0, 255)
-        );
-
-    BeginScissorMode(
-        view.x,
-        view.y,
-        view.width,
-        view.height);
-
-    AimReticle().drawAt({
-        .rectangle = {
-            (view.x + scroll.x) / drawArea.scale,
-            (view.y + scroll.y) / drawArea.scale,
+    AimReticle().scrollable(
+        {
             drawArea.rectangle.width,
             drawArea.rectangle.height,
         },
-        .scale = drawArea.scale,
+        scroll)
+    ->drawAt( {
+        {
+            drawArea.rectangle.x + drawArea.rectangle.width / 2,
+            drawArea.rectangle.y,
+            drawArea.rectangle.width / 2,
+            drawArea.rectangle.height,
+        },
+        drawArea.scale,
     });
-
-    EndScissorMode();
 }
 
 void Root::drawAt(const DrawArea &drawArea) {
