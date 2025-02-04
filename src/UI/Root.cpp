@@ -11,6 +11,7 @@
 #include "AimReticle.h"
 #include "Button.h"
 #include "GUIScale.h"
+#include "TextBox.h"
 
 namespace UI {
 
@@ -63,6 +64,17 @@ void Root::drawAt(const DrawRequest &drawRequest) {
     }.toDrawable()->drawAt(drawRequest.child("btn1", {
         drawRequest.rectangle.x + 10,
         drawRequest.rectangle.y + drawRequest.rectangle.height / 2,
+        drawRequest.rectangle.width / 3,
+        RAYGUI_MESSAGEBOX_BUTTON_HEIGHT,
+    }));
+
+    TextBox {
+        text,
+        sizeof(text),
+        [this]() { std::cout << "TextBox ENTER! >> " << text << std::endl; },
+    }.toDrawable()->drawAt(drawRequest.child("txtBox", {
+        drawRequest.rectangle.x + 10,
+        drawRequest.rectangle.y + drawRequest.rectangle.height / 2 + RAYGUI_MESSAGEBOX_BUTTON_HEIGHT + 10,
         drawRequest.rectangle.width / 3,
         RAYGUI_MESSAGEBOX_BUTTON_HEIGHT,
     }));

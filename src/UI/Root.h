@@ -15,6 +15,7 @@ struct Root : IDrawable {
     DemoButtonMsgBox demoBox2;
     Vector2 scroll { 0, 0 };
     Vector2 scroll2 { -50, -180 };
+    char text[64] = "crabby";
 
     void drawAt(const DrawRequest &drawRequest) override;
 private:
