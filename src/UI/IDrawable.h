@@ -17,6 +17,11 @@ struct IDrawable {
     std::unique_ptr<IDrawable> scrollable(const char *title, const Vector2 &size, Vector2 &offset);
     std::unique_ptr<IDrawable> interactable(bool interactable = true);
     std::unique_ptr<IDrawable> focusable(bool enabled = true);
+
+    std::unique_ptr<IDrawable> padding(const Rectangle &insets);
+    std::unique_ptr<IDrawable> padding(float inset) {
+        return padding(Rectangle { inset, inset, inset, inset });
+    }
 };
 
 } // UI

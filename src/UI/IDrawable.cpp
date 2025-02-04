@@ -82,4 +82,15 @@ std::unique_ptr<IDrawable> IDrawable::focusable(bool enabled) {
     });
 }
 
+std::unique_ptr<IDrawable> IDrawable::padding(const Rectangle &insets) {
+    return std::make_unique<FuncDrawable>([this, insets](const DrawRequest &drawRequest) {
+        this->drawAt(drawRequest.child("inset", {
+            drawRequest.rectangle.x + insets.x,
+            drawRequest.rectangle.y + insets.y,
+            drawRequest.rectangle.width - insets.x - insets.width,
+            drawRequest.rectangle.height - insets.y - insets.height,
+        }));
+    });
+}
+
 } // UI
