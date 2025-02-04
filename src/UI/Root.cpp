@@ -3,9 +3,14 @@
 //
 
 #include "Root.h"
+
+#include <iostream>
+
 #include "raygui.h"
 
 #include "AimReticle.h"
+#include "Button.h"
+#include "GUIScale.h"
 
 namespace UI {
 
@@ -51,6 +56,16 @@ void Root::drawAt(const DrawRequest &drawRequest) {
 
     drawScrollPanel(drawRequest);
     drawScrollPanel2(drawRequest);
+
+    Button {
+        "Test Button",
+        [this]() { std::cout << "BTN clicked!" << std::endl; },
+    }.toDrawable()->drawAt(drawRequest.child("btn1", {
+        drawRequest.rectangle.x + 10,
+        drawRequest.rectangle.y + drawRequest.rectangle.height / 2,
+        drawRequest.rectangle.width / 3,
+        RAYGUI_MESSAGEBOX_BUTTON_HEIGHT,
+    }));
 }
 
 } // UI

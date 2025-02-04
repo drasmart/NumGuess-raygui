@@ -41,7 +41,21 @@ struct DrawRequest {
     [[nodiscard]]
     Focusable toFocusable() const { return { fullId(), rectangle }; }
 
+    [[nodiscard]]
+    bool checkFocus(bool enabled) const { return context->focusManager.checkFocus(toFocusable(), enabled); }
     void claimFocus() const { context->focusManager.claimFocus(toFocusable()); }
+    void dropFocus() const { context->focusManager.dropFocus(toFocusable()); }
+
+    [[nodiscard]]
+    Rectangle scaledRectangle() const {
+        const float k = scale();
+        return {
+            rectangle.x * k,
+            rectangle.y * k,
+            rectangle.width * k,
+            rectangle.height * k,
+        };
+    }
 };
 
 } // UI

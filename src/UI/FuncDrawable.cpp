@@ -6,7 +6,7 @@
 
 namespace UI {
 
-FuncDrawable::FuncDrawable(std::function<void(const DrawRequest &drawRequest)> func): func(func) {}
+FuncDrawable::FuncDrawable(const std::function<void(const DrawRequest &drawRequest)> &func): func(func) {}
 
 void FuncDrawable::drawAt(const DrawRequest &drawRequest) {
     func(drawRequest);

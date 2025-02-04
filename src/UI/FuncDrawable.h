@@ -14,7 +14,7 @@ namespace UI {
 class FuncDrawable : public IDrawable {
     const std::function<void(const DrawRequest &drawRequest)> func;
 public:
-    explicit FuncDrawable(std::function<void(const DrawRequest &drawRequest)> func);
+    explicit FuncDrawable(const std::function<void(const DrawRequest &drawRequest)> &func);
     void drawAt(const DrawRequest &drawRequest) override;
 };
 
