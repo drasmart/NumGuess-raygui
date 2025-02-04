@@ -5,22 +5,25 @@
 #include "Button.h"
 
 #include "FuncDrawable.h"
+#include "BoxingDrawable.h"
 
 #include "raygui.h"
 
 namespace UI {
 
 std::unique_ptr<IDrawable> Button::toDrawable() const {
-    return std::make_unique<FuncDrawable>([clone = *this](const DrawRequest &drawRequest){
+    std::unique_ptr<IDrawable> mainFunc = std::make_unique<FuncDrawable>([clone = *this](const DrawRequest &drawRequest){
         if (GuiButton(drawRequest.scaledRectangle(), clone.title)) {
             drawRequest.claimFocus();
             clone.callback();
             return;
         }
-        if (drawRequest.checkFocus(clone.enabled) && (IsKeyDown(KEY_ENTER) || IsKeyDown(KEY_SPACE))) {
+        if (drawRequest.checkFocus(clone.enabled) && (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE))) {
             clone.callback();
         }
-    })->focusable(enabled);
+    });
+    std::unique_ptr<IDrawable> decoratedFunc = mainFunc->focusable(enabled);
+    return std::make_unique<BoxingDrawable>(decoratedFunc, mainFunc);
 }
 
 } // UI
