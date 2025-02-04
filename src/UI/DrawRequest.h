@@ -9,9 +9,9 @@
 #include <string>
 #include <variant>
 
-#include "Context.h"
-
 namespace UI {
+
+struct Context;
 
 typedef std::variant<std::string, int> DrawRequestIdFragment;
 
@@ -21,12 +21,21 @@ struct DrawRequest {
     const DrawRequest * const parent;
     Context * const context;
 
+    [[nodiscard]]
     DrawRequest child(
-        const DrawRequestIdFragment &key,
-        Rectangle rect) const;
+        const DrawRequestIdFragment &key, Rectangle rect) const;
+
+    [[nodiscard]]
+    DrawRequest child(const DrawRequestIdFragment &key) const {
+        return child(key, rectangle);
+    }
 
     void dumpIds(std::ostream &ss) const;
-    float scale() const { return context->scale; }
+    [[nodiscard]]
+    std::string fullId() const;
+
+    [[nodiscard]]
+    float scale() const;
 };
 
 } // UI

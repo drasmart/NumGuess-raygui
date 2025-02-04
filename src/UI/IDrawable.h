@@ -15,7 +15,8 @@ struct IDrawable {
     virtual ~IDrawable();
 
     std::unique_ptr<IDrawable> scrollable(const char *title, const Vector2 &size, Vector2 &offset);
-    std::unique_ptr<IDrawable> interactable(bool interactable);
+    std::unique_ptr<IDrawable> interactable(bool interactable = true);
+    std::unique_ptr<IDrawable> focusable(bool enabled = true);
 };
 
 } // UI

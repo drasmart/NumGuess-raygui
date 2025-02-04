@@ -3,6 +3,8 @@
 //
 
 #include "IDrawable.h"
+
+#include "FocusWrapper.h"
 #include "ScrollWrapper.h"
 #include "InteractivityWrapper.h"
 
@@ -16,6 +18,9 @@ std::unique_ptr<IDrawable> IDrawable::scrollable(const char *title, const Vector
 
 std::unique_ptr<IDrawable> IDrawable::interactable(bool interactable) {
     return std::make_unique<InteractivityWrapper>(this, interactable);
+}
+std::unique_ptr<IDrawable> IDrawable::focusable(bool enabled) {
+    return std::make_unique<FocusWrapper>(this, enabled);
 }
 
 } // UI

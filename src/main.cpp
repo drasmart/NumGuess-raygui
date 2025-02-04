@@ -3,6 +3,7 @@
 #include "raygui.h"
 
 #include "UI/Root.h"
+#include "UI/Context.h"
 #include "UI/GUIScale.h"
 
 #include <sstream>
@@ -56,6 +57,8 @@ int main()
             UpdateScale();
         }
 
+        context.focusManager.clearCache();
+
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -74,6 +77,14 @@ int main()
         });
 
         EndDrawing();
+
+        if (!context.focusManager.focusMoved() && IsKeyPressed(KEY_TAB)) {
+            if (IsKeyDown(KEY_LEFT_SHIFT)) {
+                context.focusManager.movePrev();
+            } else {
+                context.focusManager.moveNext();
+            }
+        }
     }
 
     CloseWindow();

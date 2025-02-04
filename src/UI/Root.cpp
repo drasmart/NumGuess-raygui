@@ -11,7 +11,9 @@ namespace UI {
 
 void Root::drawScrollPanel(const DrawRequest &drawRequest) {
 
-    demoBox2.scrollable("SCROLL AREA",
+    demoBox2
+    .focusable()
+    ->scrollable("SCROLL AREA",
         {
             drawRequest.rectangle.width,
             drawRequest.rectangle.height,
@@ -43,9 +45,12 @@ void Root::drawScrollPanel2(const DrawRequest &drawRequest) {
 }
 
 void Root::drawAt(const DrawRequest &drawRequest) {
+    demoBox1
+    .focusable()
+    ->drawAt(drawRequest);
+
     drawScrollPanel(drawRequest);
     drawScrollPanel2(drawRequest);
-    demoBox1.drawAt(drawRequest);
 }
 
 } // UI

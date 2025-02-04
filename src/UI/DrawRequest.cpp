@@ -3,6 +3,7 @@
 //
 
 #include "DrawRequest.h"
+#include "Context.h"
 
 #include <sstream>
 
@@ -31,6 +32,16 @@ void DrawRequest::dumpIds(std::ostream &ss) const {
     } else {
         ss << std::get<0>(id);
     }
+}
+
+std::string DrawRequest::fullId() const {
+    std::stringstream ss;
+    dumpIds(ss);
+    return ss.str();
+}
+
+float DrawRequest::scale() const {
+    return context->scale;
 }
 
 } // UI

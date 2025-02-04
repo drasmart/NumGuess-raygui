@@ -8,11 +8,14 @@
 #include "raylib.h"
 #include <optional>
 
+#include "FocusManager.h"
+
 namespace UI {
 
 struct Context {
     float scale = 1;
     std::optional<Rectangle> clipArea;
+    FocusManager focusManager;
 };
 
 } // UI
