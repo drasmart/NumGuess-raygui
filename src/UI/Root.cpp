@@ -12,6 +12,7 @@
 #include "Button.h"
 #include "GUIScale.h"
 #include "TextBox.h"
+#include "ValueBox.h"
 
 namespace UI {
 
@@ -68,10 +69,12 @@ void Root::drawAt(const DrawRequest &drawRequest) {
         RAYGUI_MESSAGEBOX_BUTTON_HEIGHT,
     }));
 
-    TextBox {
+    ValueBox {
         text,
-        sizeof(text),
-        [this]() { std::cout << "TextBox ENTER! >> " << text << std::endl; },
+        &x,
+        -5,
+        1000,
+        [this]() { std::cout << "ValueBox ENTER! >> " << x << std::endl; },
     }.toDrawable()->drawAt(drawRequest.child("txtBox", {
         drawRequest.rectangle.x + 10,
         drawRequest.rectangle.y + drawRequest.rectangle.height / 2 + RAYGUI_MESSAGEBOX_BUTTON_HEIGHT + 10,
