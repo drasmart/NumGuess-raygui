@@ -8,6 +8,20 @@
 
 namespace UI {
 
+void FocusManager::claimFocus(const Focusable &request) {
+    if (selected && *selected == request.id) {
+        return;
+    }
+    selected = request.id;
+    const auto it = std::find_if(
+        std::execution::seq, focusables.begin(), focusables.end(),
+        [&](auto&& x) { return x.id == *selected; });
+    didMoveFocus = true;
+    if (it == focusables.end()) {
+        focusables.push_back(request);
+    }
+}
+
 void FocusManager::dropFocus(const Focusable &request)
 {
     if (selected && *selected == request.id) {

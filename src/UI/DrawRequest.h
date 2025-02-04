@@ -6,12 +6,13 @@
 #define SCALEDRECTANGLE_H
 
 #include "raylib.h"
+
+#include "Context.h"
+
 #include <string>
 #include <variant>
 
 namespace UI {
-
-struct Context;
 
 typedef std::variant<std::string, int> DrawRequestIdFragment;
 
@@ -36,6 +37,11 @@ struct DrawRequest {
 
     [[nodiscard]]
     float scale() const;
+
+    [[nodiscard]]
+    Focusable toFocusable() const { return { fullId(), rectangle }; }
+
+    void claimFocus() const { context->focusManager.claimFocus(toFocusable()); }
 };
 
 } // UI

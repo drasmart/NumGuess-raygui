@@ -20,7 +20,7 @@ void InteractivityWrapper::drawAt(const DrawRequest &drawRequest) {
             GuiLock();
         }
     }
-    drawable->drawAt(drawRequest.child("int-boxed", drawRequest.rectangle));
+    drawable->drawAt(drawRequest);
     if (globalInteractable != interactable) {
         if (globalInteractable) {
             GuiUnlock();

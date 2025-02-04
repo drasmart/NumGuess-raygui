@@ -22,6 +22,7 @@ void DemoButtonMsgBox::drawAt(const DrawRequest &drawRequest) {
         std::cout << ")" << std::endl;
 
         showMessageBox = true;
+        drawRequest.claimFocus();
     }
 
     if (showMessageBox)
@@ -40,6 +41,7 @@ void DemoButtonMsgBox::drawAt(const DrawRequest &drawRequest) {
             std::cout << ")" << std::endl;
 
             showMessageBox = false;
+            drawRequest.claimFocus();
         }
     }
 }

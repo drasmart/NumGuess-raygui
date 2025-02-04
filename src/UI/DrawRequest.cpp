@@ -3,7 +3,6 @@
 //
 
 #include "DrawRequest.h"
-#include "Context.h"
 
 #include <sstream>
 

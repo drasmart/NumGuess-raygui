@@ -5,7 +5,6 @@
 #include "FocusWrapper.h"
 
 #include "AimReticle.h"
-#include "Context.h"
 
 namespace UI {
 
@@ -15,11 +14,9 @@ FocusWrapper::FocusWrapper(IDrawable * content, bool focusable):
 
 void FocusWrapper::drawAt(const DrawRequest &drawRequest) {
 
-    bool focused = drawRequest.context->focusManager.checkFocus({
-        drawRequest.fullId(),
-        drawRequest.rectangle,
-    }, focusable);
-    content->interactable(focused)->drawAt(drawRequest);
+    const bool focused = drawRequest.context->focusManager.checkFocus(
+        drawRequest.toFocusable(), focusable);
+    content->interactable(focusable)->drawAt(drawRequest);
     if (focused) {
         AimReticle().drawAt(drawRequest.child("focus-reticle"));
     }

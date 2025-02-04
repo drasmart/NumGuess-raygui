@@ -24,6 +24,7 @@ class FocusManager {
     bool didMoveFocus = false;
 
 public:
+    void claimFocus(const Focusable &request);
     void dropFocus(const Focusable &request);
     [[nodiscard]]
     bool checkFocus(const Focusable &request, bool focusable);
