@@ -12,14 +12,14 @@ void FocusManager::claimFocus(const Focusable &request) {
     if (selected && *selected == request.id) {
         return;
     }
-    selected = request.id;
     const auto it = std::find_if(
         std::execution::seq, focusables.begin(), focusables.end(),
         [&](auto&& x) { return x.id == *selected; });
-    didMoveFocus = true;
     if (it == focusables.end()) {
         focusables.push_back(request);
     }
+    selected = request.id;
+    didMoveFocus = true;
 }
 
 void FocusManager::dropFocus(const Focusable &request)
@@ -32,10 +32,15 @@ void FocusManager::dropFocus(const Focusable &request)
 
 bool FocusManager::checkFocus(const Focusable &request, bool focusable)
 {
-    focusables.push_back(request);
     if (!focusable) {
         dropFocus(request);
         return false;
+    }
+    const auto it = std::find_if(
+        std::execution::seq, focusables.begin(), focusables.end(),
+        [&](auto&& x) { return x.id == request.id; });
+    if (it == focusables.end()) {
+        focusables.push_back(request);
     }
     if (selected) {
         return *selected == request.id;
