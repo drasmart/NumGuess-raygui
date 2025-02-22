@@ -20,7 +20,7 @@ namespace UI {
         const float alignment;
         const size_t count;
         const std::function<DrawRequestIdFragment(size_t)> keys;
-        const std::function<Vector2(const DrawRequestIdFragment &, float, float)> preferredSizes;
+        const std::function<Vector2(const DrawRequestIdFragment &, float, const DrawRequest &)> preferredSizes;
         const std::function<void(const DrawRequestIdFragment &, const DrawRequest &)> drawers;
 
         [[nodiscard]]

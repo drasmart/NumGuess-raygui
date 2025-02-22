@@ -15,6 +15,7 @@
 #include "TextBox.h"
 #include "ValueBox.h"
 #include "DirectionalBox.h"
+#include "GuessRangeBar.h"
 
 namespace Game {
 
@@ -30,7 +31,7 @@ static void drawScrollPanel(Root &root, const DrawRequest &drawRequest) {
         .alignment = 0.5f,
         .count = 5,
         .keys = [](size_t x){ return (int)x; },
-        .preferredSizes = [](const DrawRequestIdFragment &idFrag, float mn, float mx) {
+        .preferredSizes = [](const DrawRequestIdFragment &idFrag, float mn, const DrawRequest &drawRequest2) {
             return Vector2{
                 mn - (float)GuiScale::getRawStyle().scrollBarWidth.listView - 1,
                 RAYGUI_MESSAGEBOX_BUTTON_HEIGHT / GuiScale::guiScale,
@@ -83,6 +84,25 @@ void Root::drawAt(const DrawRequest &drawRequest) {
         drawRequest.rectangle.width / 3,
         RAYGUI_MESSAGEBOX_BUTTON_HEIGHT,
     }));
+
+    {
+        const GuessSession s = {
+            .targetNumber = 789,
+            .maxValue = 2345,
+            //.guesses = { 789 },
+            .misses = {
+                632,
+                901,
+            },
+        };
+        Rectangle r = drawRequest.rectangle;
+        r.width /= 3;
+        r.x += r.width;
+        r.y += r.height / 3;
+        GuessRangeBar q { s };
+        r.height = q.getHeight(drawRequest.scale());
+        q.toDrawable()->drawAt(drawRequest.child("rangeBar", r));
+    }
 }
 
 } // UI

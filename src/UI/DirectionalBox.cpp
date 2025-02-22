@@ -37,7 +37,7 @@ namespace UI {
             std::vector<Vector2> prefSizes;
             prefSizes.reserve(clone.count);
             for (const auto &key : keys) {
-                const Vector2 nextSize = clone.preferredSizes(key, minFitWidth, drawRequest.rectangle.width);
+                const Vector2 nextSize = clone.preferredSizes(key, minFitWidth, drawRequest);
                 prefSizes.push_back(nextSize);
                 if (maxSize.x < nextSize.x) {
                     maxSize.x = nextSize.x;

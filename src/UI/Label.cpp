@@ -10,12 +10,7 @@ namespace UI {
 
     std::unique_ptr<IDrawable> Label::toDrawable() const {
         return std::make_unique<FuncDrawable>([textPtr = text](const DrawRequest& drawRequest) {
-            Rectangle rect = drawRequest.rectangle;
-            float const scale = drawRequest.scale();
-            rect.x *= scale;
-            rect.y *= scale;
-            rect.width *= scale;
-            rect.height *= scale;
+            const Rectangle rect = drawRequest.scaledRectangle();
             GuiLabel(rect, textPtr);
         });
     }
@@ -26,7 +21,7 @@ namespace UI {
             text,
             (float)GuiGetStyle(DEFAULT, TEXT_SIZE),
             (float)GuiGetStyle(DEFAULT, TEXT_SPACING));
-        const float padding = (int)scale + 1;
+        const float padding = 1;
         const Vector2 textSize {
             textSizeRaw.x / scale + padding,
             textSizeRaw.y / scale + padding,
