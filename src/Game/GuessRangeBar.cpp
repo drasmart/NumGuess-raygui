@@ -34,16 +34,6 @@ namespace Game {
                 baseRect.height = h;
                 return baseRect;
             }(drawRequest.scaledRectangle(), barHeight * drawRequest.scale());
-            const Rectangle rect = drawRequest.scaledRectangle();
-            {
-                const Rectangle rect = drawRequest.scaledRectangle();
-                DrawRectangleLines(
-                    (int)rect.x,
-                    (int)rect.y,
-                    (int)rect.width,
-                    (int)rect.height,
-                    Color{ 255, 0, 255, 255 });
-            }
             {
                 DrawRectangle(
                     (int)barRect.x,

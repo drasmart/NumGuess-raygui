@@ -156,6 +156,7 @@ namespace Game {
                     [&root](const DrawRequest &senderDrawRequest) {
                         std::cout << "BTN clicked!" << std::endl;
                         root.say("Challenge accepted!");
+                        root.num = root.engine.data.sessions.back().maxValue;
                         root.engine.startNewGame();
                         senderDrawRequest.dropFocus();
                     },
@@ -166,21 +167,30 @@ namespace Game {
             }
             case ExpectedInput::MaxValue:
             case ExpectedInput::Guess: {
+                int &maxValue = root.engine.data.sessions.back().maxValue;
                 ValueBox {
                     "",
-                    &root.num,
+                    input == ExpectedInput::Guess
+                    ? &root.num
+                    : &maxValue,
                     0,
                     input == ExpectedInput::Guess
-                    ? root.engine.data.sessions.back().maxValue
+                    ? maxValue
                     : INT_MAX,
-                    [&root, input](const DrawRequest &senderDrawRequest) {
-                        std::cout << "ValueBox ENTER! >> " << root.num << std::endl;
+                    [&root, input, &maxValue](const DrawRequest &senderDrawRequest) {
+                        std::cout
+                        << "ValueBox ENTER! >> "
+                        << (input == ExpectedInput::Guess
+                            ? root.num
+                            : maxValue)
+                        << std::endl;
+
                         if (!root.num) {
                             return;
                         }
                         if (input == ExpectedInput::MaxValue) {
-                            root.say((std::stringstream() << "Hmm... a number between 1 and " << root.num << "... Ok!").str());
-                            root.engine.startNewGame();
+                            root.say((std::stringstream() << "Hmm... a number between 1 and " << maxValue << "... Ok!").str());
+                            root.engine.setMaxValue(maxValue);
                         } else {
                             std::stringstream ss;
                             ss << root.num << " -- ";
@@ -193,8 +203,8 @@ namespace Game {
                                 ss << "Correct!";
                             }
                             root.say(ss.str());
+                            root.num = 0;
                         }
-                        root.num = 0;
                         senderDrawRequest.dropFocus();
                     },
                 }.toDrawable()

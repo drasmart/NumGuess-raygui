@@ -21,7 +21,7 @@ namespace UI {
             text,
             (float)GuiGetStyle(DEFAULT, TEXT_SIZE),
             (float)GuiGetStyle(DEFAULT, TEXT_SPACING));
-        const float padding = 1;
+        const float padding = 1 + scale / 2;
         const Vector2 textSize {
             textSizeRaw.x / scale + padding,
             textSizeRaw.y / scale + padding,
