@@ -106,7 +106,7 @@ namespace Game {
                 if (summary.highMiss.has_value()) {
                     ss << summary.highMiss.value();
                     Rectangle rect = barRect;
-                    const float w = (summary.highMiss.value() - 1) / (summary.maxValue - 1.0f) * rect.width;
+                    const float w = (summary.maxValue - summary.highMiss.value()) / (summary.maxValue - 1.0f) * rect.width;
                     rect.x += rect.width - w;
                     rect.width = w;
                     DrawRectangle(
@@ -159,7 +159,7 @@ namespace Game {
         });
     }
 
-    float GuessRangeBar::getHeight(const float scale) const {
+    float GuessRangeBar::getHeight(const float scale) {
         return barHeight + 2 * Label {
             "1",
             GetFontDefault(),

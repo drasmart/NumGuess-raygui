@@ -29,8 +29,8 @@ namespace Game {
         setMaxValue(data.sessions.back().maxValue);
     }
 
-    void Engine::makeGuess(const NumType number) {
-        data.sessions.back().addGuess(number);
+    int Engine::makeGuess(const NumType number) {
+        return data.sessions.back().addGuess(number);
     }
 
     void Engine::startNewGame() {

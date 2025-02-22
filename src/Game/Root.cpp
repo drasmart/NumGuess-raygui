@@ -5,6 +5,7 @@
 #include "Root.h"
 
 #include <iostream>
+#include <Label.h>
 #include <sstream>
 
 #include "raygui.h"
@@ -19,95 +20,196 @@
 
 namespace Game {
 
-using namespace UI;
+    using namespace UI;
 
-static void drawScrollPanel(Root &root, const DrawRequest &drawRequest) {
+    static constexpr float SideSplitFactor = 0.7f;
+    static constexpr float GuessRangeBarFrameThickness = 1;
+    static constexpr float GuessRangeBarFramePadding = 2;
+    static constexpr float MainFrameInset = 4;
 
-    DirectionalBox {
-        .title = "Dir Box",
-        .direction = { 0, 1 },
-        .offset = root.scroll,
-        .insets = { 4, 4 },
-        .alignment = 0.5f,
-        .count = 5,
-        .keys = [](size_t x){ return (int)x; },
-        .preferredSizes = [](const DrawRequestIdFragment &idFrag, float mn, const DrawRequest &drawRequest2) {
-            return Vector2{
-                mn - (float)GuiScale::getRawStyle().scrollBarWidth.listView - 1,
-                RAYGUI_MESSAGEBOX_BUTTON_HEIGHT / GuiScale::guiScale,
-            };
-        },
-        .drawers = [](const DrawRequestIdFragment &idFrag, const DrawRequest &btnReq) {
-            const auto s = (std::stringstream() << "Boxed Button " << std::get<1>(idFrag)).str();
-            Button {
-                .title = s.c_str(),
-                .callback = [&s](const DrawRequest& btnReq2) {
-                    std::cout << s << " Clicked!" << std::endl;
-                },
-            }.toDrawable()->drawAt(btnReq);
-        },
-    }
-    .toDrawable()
-    ->drawAt( drawRequest.child("scroll-panel", {
-        drawRequest.rectangle.x + drawRequest.rectangle.width / 2,
-        drawRequest.rectangle.y,
-        drawRequest.rectangle.width / 2,
-        drawRequest.rectangle.height,
-    }));
-}
+    static void drawHistoryScrollPanel(Root &root, const DrawRequest &drawRequest) {
 
-void Root::drawAt(const DrawRequest &drawRequest) {
-    drawScrollPanel(*this, drawRequest);
-
-    Button {
-        "Test Button",
-        [this](const DrawRequest &_) { std::cout << "BTN clicked!" << std::endl; },
-    }.toDrawable()->drawAt(drawRequest.child("btn1", {
-        drawRequest.rectangle.x + 10,
-        drawRequest.rectangle.y + drawRequest.rectangle.height / 2,
-        drawRequest.rectangle.width / 3,
-        RAYGUI_MESSAGEBOX_BUTTON_HEIGHT,
-    }));
-
-    ValueBox {
-        text,
-        &x,
-        -5,
-        1000,
-        [this](const DrawRequest &valueBoxDrawRequest) {
-            std::cout << "ValueBox ENTER! >> " << x << std::endl;
-            valueBoxDrawRequest.dropFocus();
-        },
-    }.toDrawable()->padding(8)->drawAt(drawRequest.child("txtBox", {
-        drawRequest.rectangle.x + 10,
-        drawRequest.rectangle.y + drawRequest.rectangle.height / 2 + RAYGUI_MESSAGEBOX_BUTTON_HEIGHT + 10,
-        drawRequest.rectangle.width / 3,
-        RAYGUI_MESSAGEBOX_BUTTON_HEIGHT,
-    }));
-
-    {
-        const GuessSession s = {
-            .targetNumber = 789,
-            .maxValue = 2345,
-            //.guesses = { 789 },
-            .misses = {
-                632,
-                901,
+        DirectionalBox {
+            .title = "Last Game Results",
+            .direction = { 0, 1 },
+            .offset = root.historyScroll,
+            .insets = { MainFrameInset, MainFrameInset },
+            .alignment = 0.5f,
+            .count = root.engine.data.sessions.size(),
+            .keys = [&root](size_t x) {
+                return (int)(root.engine.data.sessions.size() - x - 1);
             },
-        };
-        Rectangle r = drawRequest.rectangle;
-        r.width /= 3;
-        r.x += r.width;
-        r.y += r.height / 3;
-        GuessRangeBar q { s };
-        r.height = q.getHeight(drawRequest.scale()) + 6;
-        q.toDrawable()
-        ->padding(2)
-        ->filled({ 255, 255, 255, 255 })
-        ->padding(1)
-        ->filled({ 127, 127, 127, 255 })
-        ->drawAt(drawRequest.child("rangeBar", r));
+            .preferredSizes = [](const DrawRequestIdFragment &idFrag, float mn, const DrawRequest &drawRequest2) {
+                return Vector2 {
+                    mn - (float)GuiScale::getRawStyle().scrollBarWidth.listView - 1,
+                    GuessRangeBar::getHeight(drawRequest2.scale())
+                    + 2 * (GuessRangeBarFrameThickness + GuessRangeBarFramePadding),
+                };
+            },
+            .drawers = [&ss = root.engine.data.sessions](const DrawRequestIdFragment &idFrag, const DrawRequest &drawRequest2) {
+                GuessRangeBar { ss[std::get<1>(idFrag)] }
+                .toDrawable()
+                ->padding(GuessRangeBarFramePadding)
+                ->filled({ 255, 255, 255, 255 })
+                ->padding(GuessRangeBarFrameThickness)
+                ->filled({ 127, 127, 127, 255 })
+                ->drawAt(drawRequest2);
+            },
+        }
+        .toDrawable()
+        ->drawAt( drawRequest.child("history-panel", {
+            drawRequest.rectangle.x + drawRequest.rectangle.width * SideSplitFactor,
+            drawRequest.rectangle.y,
+            drawRequest.rectangle.width * (1 - SideSplitFactor),
+            drawRequest.rectangle.height,
+        }));
     }
-}
+
+    static float getInputPanelHeight(const DrawRequest &drawRequest) {
+        return RAYGUI_MESSAGEBOX_BUTTON_HEIGHT / GuiScale::guiScale + 2 * MainFrameInset;
+    }
+
+    static void drawTextScrollPanel(Root &root, const DrawRequest &drawRequest) {
+
+        DirectionalBox {
+            .title = "Chat log",
+            .direction = { 0, 1 },
+            .offset = root.textScroll,
+            .insets = { MainFrameInset, MainFrameInset },
+            .alignment = 0.5f,
+            .count = root.chatLog.size() + 1,
+            .keys = [](size_t x) {
+                return (int)(x);
+            },
+            .preferredSizes = [](const DrawRequestIdFragment &idFrag, float mn, const DrawRequest &drawRequest2) {
+                return Vector2 {
+                    mn - (float)GuiScale::getRawStyle().scrollBarWidth.listView - 1,
+                    Label { "dbqp", GetFontDefault() }.estimatedSize(drawRequest2.scale()).y,
+                };
+            },
+            .drawers = [&root](const DrawRequestIdFragment &idFrag, const DrawRequest &btnReq) {
+                const size_t x = std::get<1>(idFrag);
+                const char *msg;
+                if (x < root.chatLog.size()) {
+                    msg = root.chatLog[x].c_str();
+                } else {
+                    switch (root.engine.nextInput()) {
+                        case ExpectedInput::Name:
+                            msg = "Kindly name yourself...";
+                            break;
+                        case ExpectedInput::Guess:
+                            msg = "Make your guess...";
+                            break;
+                        case ExpectedInput::MaxValue:
+                            msg = "Pick your ceiling...";
+                            break;
+                        case ExpectedInput::NewGame:
+                            msg = "Start again?...";
+                            break;
+                        default:
+                            throw std::logic_error("This should be impossible.");
+                    }
+                }
+                Label { msg, GetFontDefault() }.toDrawable()->drawAt(btnReq);
+            },
+        }
+        .toDrawable()
+        ->drawAt( drawRequest.child("chat-panel", {
+            drawRequest.rectangle.x,
+            drawRequest.rectangle.y,
+            drawRequest.rectangle.width * SideSplitFactor,
+            drawRequest.rectangle.height - getInputPanelHeight(drawRequest),
+        }));
+    }
+
+    static void drawInputPanel(Root &root, const DrawRequest &drawRequest) {
+        Rectangle rectangle = drawRequest.rectangle;
+        rectangle.width *= SideSplitFactor;
+        const float h = getInputPanelHeight(drawRequest);
+        rectangle.y = rectangle.height - h;
+        rectangle.height = h;
+
+        const ExpectedInput input = root.engine.nextInput();
+        switch (input) {
+            case ExpectedInput::Name: {
+                TextBox {
+                    .textBuffer = root.nameBuf,
+                    .textSize = sizeof(root.nameBuf),
+                    .onEnter = [&root](const DrawRequest &senderDrawRequest) {
+                        std::cout << "TEXT entered! -- " << root.nameBuf << std::endl;
+                        const std::string name = root.nameBuf;
+                        if (name.empty()) {
+                            return;
+                        }
+                        root.say("Nice to meet you, " + name + ".");
+                        root.engine.setName(name);
+                        senderDrawRequest.dropFocus();
+                    },
+                }.toDrawable()
+                ->padding(MainFrameInset)
+                ->drawAt(drawRequest.child("nameBox", rectangle));
+                break;
+            }
+            case ExpectedInput::NewGame: {
+                Button {
+                    "Start New Game",
+                    [&root](const DrawRequest &senderDrawRequest) {
+                        std::cout << "BTN clicked!" << std::endl;
+                        root.say("Challenge accepted!");
+                        root.engine.startNewGame();
+                        senderDrawRequest.dropFocus();
+                    },
+                }.toDrawable()
+                ->padding(MainFrameInset)
+                ->drawAt(drawRequest.child("newGameBtn", rectangle));
+                break;
+            }
+            case ExpectedInput::MaxValue:
+            case ExpectedInput::Guess: {
+                ValueBox {
+                    "",
+                    &root.num,
+                    0,
+                    input == ExpectedInput::Guess
+                    ? root.engine.data.sessions.back().maxValue
+                    : INT_MAX,
+                    [&root, input](const DrawRequest &senderDrawRequest) {
+                        std::cout << "ValueBox ENTER! >> " << root.num << std::endl;
+                        if (!root.num) {
+                            return;
+                        }
+                        if (input == ExpectedInput::MaxValue) {
+                            root.say((std::stringstream() << "Hmm... a number between 1 and " << root.num << "... Ok!").str());
+                            root.engine.startNewGame();
+                        } else {
+                            std::stringstream ss;
+                            ss << root.num << " -- ";
+                            const int missSign = root.engine.makeGuess(root.num);
+                            if (missSign < 0) {
+                                ss << "Too low!";
+                            } else if (missSign > 0) {
+                                ss << "Too high!";
+                            } else {
+                                ss << "Correct!";
+                            }
+                            root.say(ss.str());
+                        }
+                        root.num = 0;
+                        senderDrawRequest.dropFocus();
+                    },
+                }.toDrawable()
+                ->padding(MainFrameInset)
+                ->drawAt(drawRequest.child("numInputBox", rectangle));
+                break;
+            }
+        }
+
+    }
+
+    void Root::drawAt(const DrawRequest &drawRequest) {
+        drawInputPanel(*this, drawRequest);
+        drawTextScrollPanel(*this, drawRequest);
+        drawHistoryScrollPanel(*this, drawRequest);
+    }
 
 } // UI

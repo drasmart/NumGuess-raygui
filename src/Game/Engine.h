@@ -23,12 +23,12 @@ namespace Game {
         } misses;
 
         [[nodiscard]] bool started() const {
-          return targetNumber <= 0;
+          return targetNumber > 0;
         }
         [[nodiscard]] bool completed() const {
           return !guesses.empty() && guesses.back() == targetNumber;
         }
-        void addGuess(NumType number) {
+        int addGuess(NumType number) {
             guesses.push_back(number);
             if (number < targetNumber && misses.low.value_or(0) < number) {
                 misses.low = number;
@@ -36,6 +36,7 @@ namespace Game {
             if (number > targetNumber && number < misses.high.value_or(maxValue + 1)) {
                 misses.high = number;
             }
+            return number - targetNumber;
         }
     };
 
@@ -56,7 +57,7 @@ namespace Game {
 
         [[nodiscard]] ExpectedInput nextInput() const;
         void setName(const std::string& playerName);
-        void makeGuess(NumType number);
+        int makeGuess(NumType number);
         void startNewGame();
         void setMaxValue(NumType maxValue);
     };

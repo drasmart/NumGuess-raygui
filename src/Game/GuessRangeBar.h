@@ -19,7 +19,7 @@ namespace Game {
         [[nodiscard]]
         std::unique_ptr<UI::IDrawable> toDrawable() const;
         [[nodiscard]]
-        float getHeight(float scale) const;
+        static float getHeight(float scale);
     };
 
 } // Game

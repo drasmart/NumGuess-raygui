@@ -20,7 +20,6 @@ std::unique_ptr<IDrawable> TextBox::toDrawable() const {
             clone.textSize,
             focused))
         {
-            drawRequest.context->focusManager.moveNext();
             clone.onEnter(drawRequest);
         }
     });
