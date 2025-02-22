@@ -25,6 +25,7 @@ void Root::drawScrollPanel(const DrawRequest &drawRequest) {
         .direction = { 0, 1 },
         .offset = scroll,
         .insets = { 4, 4 },
+        .alignment = 0.5f,
         .count = 5,
         .keys = [](size_t x){ return (int)x; },
         .preferredSizes = [](const DrawRequestIdFragment &idFrag, float mn, float mx) {
