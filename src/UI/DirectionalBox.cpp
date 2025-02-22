@@ -44,17 +44,19 @@ namespace UI {
                 fullSize.x += clone.direction.x * nextSize.x;
                 fullSize.y += clone.direction.y * nextSize.y;
             }
-            FuncDrawable([&clone, &keys, &fullSize](const DrawRequest &drawRequest2) {
+            fullSize.x += (1 - clone.direction.x) * maxSize.x;
+            fullSize.y += (1 - clone.direction.y) * maxSize.y;
+            FuncDrawable([&clone, &keys, &maxSize](const DrawRequest &drawRequest2) {
                 Rectangle rect = {
                     drawRequest2.rectangle.x + clone.insets.x,
                     drawRequest2.rectangle.y + clone.insets.y,
-                    fullSize.x,
-                    fullSize.y,
+                    maxSize.x,
+                    maxSize.y,
                 };
                 for (size_t i = 0; i < clone.count; i++) {
                     clone.drawers(keys[i], drawRequest2.child(keys[i], rect));
-                    rect.x += clone.direction.x * (clone.insets.x + fullSize.x);
-                    rect.y += clone.direction.y * (clone.insets.y + fullSize.y);
+                    rect.x += clone.direction.x * (clone.insets.x + maxSize.x);
+                    rect.y += clone.direction.y * (clone.insets.y + maxSize.y);
                 }
             }).scrollable(clone.title, fullSize, clone.offset)->drawAt(drawRequest);
         });

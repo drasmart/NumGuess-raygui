@@ -11,22 +11,27 @@ namespace UI::GuiScale {
 
 float guiScale = 1;
 
-static struct {
-    int textSize;
-    int scrollBarWidth;
-} defaultStyle;
+static RawStyle defaultStyle;
 
 void init() {
     defaultStyle = {
         .textSize = GuiGetStyle(DEFAULT, TEXT_SIZE),
-        .scrollBarWidth = GuiGetStyle(DEFAULT, SCROLLBAR_WIDTH),
+        .scrollBarWidth = {
+            .def = GuiGetStyle(DEFAULT, SCROLLBAR_WIDTH),
+            .listView = GuiGetStyle(LISTVIEW, SCROLLBAR_WIDTH),
+        }
     };
 }
 
 void apply() {
-    GuiSetStyle(DEFAULT, TEXT_SIZE, defaultStyle.textSize * guiScale);
-    GuiSetStyle(DEFAULT, SCROLLBAR_WIDTH, defaultStyle.scrollBarWidth * guiScale);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, (int)((float)defaultStyle.textSize * guiScale));
+    GuiSetStyle(DEFAULT, SCROLLBAR_WIDTH, (int)((float)defaultStyle.scrollBarWidth.def * guiScale));
+    GuiSetStyle(LISTVIEW, SCROLLBAR_WIDTH, (int)((float)defaultStyle.scrollBarWidth.listView * guiScale));
     GuiSetIconScale(static_cast<int>(guiScale));
+}
+
+const RawStyle &getRawStyle() {
+    return defaultStyle;
 }
 
 } // UI

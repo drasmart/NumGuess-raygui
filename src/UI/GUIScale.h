@@ -9,8 +9,17 @@ namespace UI::GuiScale {
 
 extern float guiScale;
 
+struct RawStyle {
+    int textSize;
+    struct {
+        int def;
+        int listView;
+    } scrollBarWidth;
+};
+
 extern void init();
 extern void apply();
+extern const RawStyle &getRawStyle();
 
 } // UI
 
