@@ -20,11 +20,13 @@ namespace Game {
             std::optional<NumType> targetNum;
             std::optional<NumType> lowMiss;
             std::optional<NumType> highMiss;
+            size_t attempts = 0;
         } const summary {
             session.maxValue,
             session.completed() ? std::optional(session.targetNumber) : std::nullopt,
             session.misses.low,
             session.misses.high,
+            session.guesses.size(),
         };
         return std::make_unique<FuncDrawable>([summary](const DrawRequest &drawRequest) {
             const Rectangle barRect = [](Rectangle baseRect, const float h) {
@@ -50,7 +52,7 @@ namespace Game {
                     (int)barRect.height,
                     summary.targetNum.has_value()
                     ? Color{ 0, 255, 0, 255 }
-                    : Color{ 0, 0, 255, 255 });
+                    : Color{ 0, 96, 255, 255 });
             }
             const Font f = GetFontDefault();
             {
@@ -73,6 +75,7 @@ namespace Game {
             }
             {
                 std::stringstream ss;
+                ss << "( ";
                 if (summary.lowMiss.has_value()) {
                     ss << summary.lowMiss.value();
                     Rectangle rect = barRect;
@@ -83,10 +86,11 @@ namespace Game {
                         (int)rect.y,
                         (int)rect.width,
                         (int)rect.height,
-                        Color{ 255, 0, 0, 255 });
+                        Color{ 220, 128, 128, 255 });
                 } else {
                     ss << '?';
                 }
+                ss << " )";
                 auto const t = ss.str();
                 const Label l { t.c_str(), f };
                 const Vector2 s = l.estimatedSize(drawRequest.scale());
@@ -98,6 +102,7 @@ namespace Game {
             }
             {
                 std::stringstream ss;
+                ss << "( ";
                 if (summary.highMiss.has_value()) {
                     ss << summary.highMiss.value();
                     Rectangle rect = barRect;
@@ -109,10 +114,11 @@ namespace Game {
                         (int)rect.y,
                         (int)rect.width,
                         (int)rect.height,
-                        Color{ 255, 0, 0, 255 });
+                        Color{ 220, 128, 128, 255 });
                 } else {
                     ss << '?';
                 }
+                ss << " )";
                 auto const t = ss.str();
                 const Label l { t.c_str(), f };
                 const Vector2 s = l.estimatedSize(drawRequest.scale());
@@ -138,6 +144,17 @@ namespace Game {
                 r.width = s.x;
                 r.height = s.y;
                 l.toDrawable()->drawAt(drawRequest.child("target", r));
+            }
+            {
+                auto const t = (std::stringstream() << summary.attempts << " attempts").str();
+                const Label l { t.c_str(), f };
+                const Vector2 s = l.estimatedSize(drawRequest.scale());
+                Rectangle r = drawRequest.rectangle;
+                r.x += (r.width - s.x) / 2;
+                r.y += r.height - s.y;
+                r.width = s.x;
+                r.height = s.y;
+                l.toDrawable()->drawAt(drawRequest.child("attempts", r));
             }
         });
     }
