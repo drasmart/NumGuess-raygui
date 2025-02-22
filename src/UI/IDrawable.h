@@ -22,6 +22,7 @@ struct IDrawable {
     std::unique_ptr<IDrawable> padding(float inset) {
         return padding(Rectangle { inset, inset, inset, inset });
     }
+    std::unique_ptr<IDrawable> filled(Color color);
 };
 
 } // UI

@@ -93,4 +93,17 @@ std::unique_ptr<IDrawable> IDrawable::padding(const Rectangle &insets) {
     });
 }
 
+std::unique_ptr<IDrawable> IDrawable::filled(const Color color) {
+    return std::make_unique<FuncDrawable>([this, color](const DrawRequest &drawRequest) {
+        const Rectangle rectangle = drawRequest.scaledRectangle();
+        DrawRectangle(
+            (int)rectangle.x,
+            (int)rectangle.y,
+            (int)rectangle.width,
+            (int)rectangle.height,
+            color);
+        this->drawAt(drawRequest);
+    });
+}
+
 } // UI

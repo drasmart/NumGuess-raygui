@@ -100,8 +100,13 @@ void Root::drawAt(const DrawRequest &drawRequest) {
         r.x += r.width;
         r.y += r.height / 3;
         GuessRangeBar q { s };
-        r.height = q.getHeight(drawRequest.scale());
-        q.toDrawable()->drawAt(drawRequest.child("rangeBar", r));
+        r.height = q.getHeight(drawRequest.scale()) + 6;
+        q.toDrawable()
+        ->padding(2)
+        ->filled({ 255, 255, 255, 255 })
+        ->padding(1)
+        ->filled({ 127, 127, 127, 255 })
+        ->drawAt(drawRequest.child("rangeBar", r));
     }
 }
 
