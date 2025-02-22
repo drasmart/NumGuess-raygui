@@ -15,7 +15,7 @@ namespace UI {
 struct TextBox {
     char * const textBuffer;
     const int textSize;
-    const std::function<void()> onEnter;
+    const std::function<void(const DrawRequest &)> onEnter;
     const bool enabled = true;
 
     [[nodiscard]]

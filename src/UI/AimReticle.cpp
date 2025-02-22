@@ -4,6 +4,7 @@
 
 #include "AimReticle.h"
 #include "raygui.h"
+#include "Label.h"
 
 #include <sstream>
 
@@ -35,29 +36,18 @@ static void drawSizeLabel(const DrawRequest &drawRequest) {
     << drawRequest.scale()
     << "x";
     const std::string s = ss.str();
-    const Font font = GetFontDefault();
-    const Vector2 textSizeRaw = MeasureTextEx(
-        font,
-        s.c_str(),
-        (float)GuiGetStyle(DEFAULT, TEXT_SIZE),
-        (float)GuiGetStyle(DEFAULT, TEXT_SPACING));
-    const float padding = (int)drawRequest.scale() + 1;
-    const Vector2 textSize {
-        textSizeRaw.x / drawRequest.scale() + padding,
-        textSizeRaw.y / drawRequest.scale() + padding,
+    const Label label = {
+        .text = s.c_str(),
+        .font = GetFontDefault(),
     };
+    const Vector2 textSize = label.estimatedSize(drawRequest.scale());
     const Rectangle labelRect {
         drawRequest.rectangle.x + drawRequest.rectangle.width - textSize.x,
         drawRequest.rectangle.y + drawRequest.rectangle.height - textSize.y,
         textSize.x,
         textSize.y,
     };
-    GuiLabel((Rectangle){
-        labelRect.x * drawRequest.scale(),
-        labelRect.y * drawRequest.scale(),
-        labelRect.width * drawRequest.scale(),
-        labelRect.height * drawRequest.scale(),
-    }, s.c_str());
+    label.toDrawable()->drawAt(drawRequest.child("sizeLabel", labelRect));
 }
 
 void AimReticle::drawAt(const DrawRequest &drawRequest) {

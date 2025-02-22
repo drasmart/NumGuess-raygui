@@ -21,7 +21,7 @@ std::unique_ptr<IDrawable> TextBox::toDrawable() const {
             focused))
         {
             drawRequest.context->focusManager.moveNext();
-            clone.onEnter();
+            clone.onEnter(drawRequest);
         }
     });
     std::unique_ptr<IDrawable> decoratedFunc = mainFunc->focusable(enabled);

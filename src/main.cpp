@@ -2,9 +2,9 @@
 
 #include "raygui.h"
 
-#include "UI/Root.h"
-#include "UI/Context.h"
-#include "UI/GUIScale.h"
+#include "Root.h"
+#include "Context.h"
+#include "GUIScale.h"
 
 #include <sstream>
 
@@ -37,7 +37,7 @@ int main()
     UI::GuiScale::init();
     UpdateScale();
 
-    UI::Root root;
+    Game::Root root;
     UI::Context context {
         .scale = UI::GuiScale::guiScale,
     };

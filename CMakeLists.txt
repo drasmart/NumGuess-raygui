@@ -18,12 +18,17 @@ CPMAddPackage(
 
 message(STATUS "PROJECT_SOURCE_DIR = ${PROJECT_SOURCE_DIR}")
 
-include_directories(${PROJECT_SOURCE_DIR}/src)
+include_directories(
+        ${PROJECT_SOURCE_DIR}/src
+        ${PROJECT_SOURCE_DIR}/src/Game
+        ${PROJECT_SOURCE_DIR}/src/UI
+)
 
 file(GLOB SRC_FILES
         ${PROJECT_SOURCE_DIR}/src/*.cpp
         ${PROJECT_SOURCE_DIR}/src/Game/*.cpp
-        ${PROJECT_SOURCE_DIR}/src/UI/*.cpp)
+        ${PROJECT_SOURCE_DIR}/src/UI/*.cpp
+)
 message(STATUS "SRC_FILES = ${SRC_FILES}")
 add_executable(NumGuess ${SRC_FILES})
 

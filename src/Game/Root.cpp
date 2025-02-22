@@ -16,14 +16,16 @@
 #include "ValueBox.h"
 #include "DirectionalBox.h"
 
-namespace UI {
+namespace Game {
 
-void Root::drawScrollPanel(const DrawRequest &drawRequest) {
+using namespace UI;
+
+static void drawScrollPanel(Root &root, const DrawRequest &drawRequest) {
 
     DirectionalBox {
         .title = "Dir Box",
         .direction = { 0, 1 },
-        .offset = scroll,
+        .offset = root.scroll,
         .insets = { 4, 4 },
         .alignment = 0.5f,
         .count = 5,
@@ -54,7 +56,7 @@ void Root::drawScrollPanel(const DrawRequest &drawRequest) {
 }
 
 void Root::drawAt(const DrawRequest &drawRequest) {
-    drawScrollPanel(drawRequest);
+    drawScrollPanel(*this, drawRequest);
 
     Button {
         "Test Button",
