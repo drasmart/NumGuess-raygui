@@ -61,7 +61,7 @@ void Root::drawAt(const DrawRequest &drawRequest) {
 
     Button {
         "Test Button",
-        [this]() { std::cout << "BTN clicked!" << std::endl; },
+        [this](const DrawRequest &_) { std::cout << "BTN clicked!" << std::endl; },
     }.toDrawable()->drawAt(drawRequest.child("btn1", {
         drawRequest.rectangle.x + 10,
         drawRequest.rectangle.y + drawRequest.rectangle.height / 2,

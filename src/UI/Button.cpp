@@ -15,11 +15,11 @@ std::unique_ptr<IDrawable> Button::toDrawable() const {
     std::unique_ptr<IDrawable> mainFunc = std::make_unique<FuncDrawable>([clone = *this](const DrawRequest &drawRequest){
         if (GuiButton(drawRequest.scaledRectangle(), clone.title)) {
             drawRequest.claimFocus();
-            clone.callback();
+            clone.callback(drawRequest);
             return;
         }
         if (drawRequest.checkFocus(clone.enabled) && (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE))) {
-            clone.callback();
+            clone.callback(drawRequest);
         }
     });
     std::unique_ptr<IDrawable> decoratedFunc = mainFunc->focusable(enabled);

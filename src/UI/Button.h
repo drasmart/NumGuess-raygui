@@ -14,7 +14,7 @@ namespace UI {
 
     struct Button {
         const char * const title = nullptr;
-        const std::function<void()> callback;
+        const std::function<void(const DrawRequest &)> callback;
         const bool enabled = true;
 
         [[nodiscard]]
