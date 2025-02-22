@@ -26,8 +26,7 @@ std::unique_ptr<IDrawable> ValueBox::toDrawable() const {
                 drawRequest.claimFocus();
                 return;
             }
-            drawRequest.context->focusManager.moveNext();
-            clone.onEnter();
+            clone.onEnter(drawRequest);
             return;
         }
         if (!focused) {

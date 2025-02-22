@@ -71,7 +71,10 @@ void Root::drawAt(const DrawRequest &drawRequest) {
         &x,
         -5,
         1000,
-        [this]() { std::cout << "ValueBox ENTER! >> " << x << std::endl; },
+        [this](const DrawRequest &valueBoxDrawRequest) {
+            std::cout << "ValueBox ENTER! >> " << x << std::endl;
+            valueBoxDrawRequest.dropFocus();
+        },
     }.toDrawable()->padding(8)->drawAt(drawRequest.child("txtBox", {
         drawRequest.rectangle.x + 10,
         drawRequest.rectangle.y + drawRequest.rectangle.height / 2 + RAYGUI_MESSAGEBOX_BUTTON_HEIGHT + 10,

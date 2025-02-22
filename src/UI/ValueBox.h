@@ -17,7 +17,7 @@ struct ValueBox {
     int * const value;
     const int minValue;
     const int maxValue;
-    const std::function<void()> onEnter;
+    const std::function<void(const DrawRequest &)> onEnter;
     const bool enabled = true;
 
     [[nodiscard]]
