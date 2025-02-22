@@ -31,7 +31,7 @@ void Root::drawScrollPanel(const DrawRequest &drawRequest) {
         .preferredSizes = [](const DrawRequestIdFragment &idFrag, float mn, float mx) {
             return Vector2{
                 mn - (float)GuiScale::getRawStyle().scrollBarWidth.listView - 1,
-                RAYGUI_MESSAGEBOX_BUTTON_HEIGHT,
+                RAYGUI_MESSAGEBOX_BUTTON_HEIGHT / GuiScale::guiScale,
             };
         },
         .drawers = [](const DrawRequestIdFragment &idFrag, const DrawRequest &btnReq) {
