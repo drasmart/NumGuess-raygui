@@ -7,6 +7,7 @@
 #include "GUIScale.h"
 
 #include <sstream>
+#include <ctime>
 
 static const char *title = "NumGuess";
 std::string playerName = "???";
@@ -42,10 +43,12 @@ int main()
     UpdateScale();
 
     Game::Root root;
+    root.logFileName = (std::stringstream() << "game_" << std::time(nullptr) << ".log").str();
     root.onNameSet = [](const std::string &newPlayerName) {
         playerName = newPlayerName;
         UpdateWindowTitle();
     };
+
     UI::Context context {
         .scale = UI::GuiScale::guiScale,
     };

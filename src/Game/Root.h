@@ -9,10 +9,12 @@
 
 #include "IDrawable.h"
 #include <functional>
+#include <fstream>
 
 namespace Game {
 
 struct Root : UI::IDrawable {
+    std::string logFileName = "log.txt";
     std::function<void(const std::string &)> onNameSet;
     Engine engine;
     std::vector<std::string> chatLog { "Welcome, adventurer!" };
@@ -26,6 +28,14 @@ struct Root : UI::IDrawable {
     void say(const std::string &msg) {
         chatLog.push_back(msg);
         scrollToBottom = true;
+        {
+            std::ofstream outfile(logFileName, std::ios_base::app);
+            if (!outfile || !outfile.is_open()) {
+                return;
+            }
+            outfile << msg << std::endl;
+            outfile.close();
+        }
     }
 };
 
