@@ -8,15 +8,19 @@
 
 #include <sstream>
 
-static const char *title = "raygui - controls test suite";
+static const char *title = "NumGuess";
+std::string playerName = "???";
+
+static void UpdateWindowTitle() {
+    std::stringstream ss;
+    ss << title << " -- " << playerName.c_str() << " (" << UI::GuiScale::guiScale << "x)" << std::endl;
+    auto const s = ss.str();
+    SetWindowTitle(s.c_str());
+}
 
 static void UpdateScale() {
     UI::GuiScale::apply();
-
-    std::stringstream ss;
-    ss << title << " (" << UI::GuiScale::guiScale << "x)" << std::endl;
-    auto const s = ss.str();
-    SetWindowTitle(s.c_str());
+    UpdateWindowTitle();
 }
 
 int main()
@@ -38,6 +42,10 @@ int main()
     UpdateScale();
 
     Game::Root root;
+    root.onNameSet = [](const std::string &newPlayerName) {
+        playerName = newPlayerName;
+        UpdateWindowTitle();
+    };
     UI::Context context {
         .scale = UI::GuiScale::guiScale,
     };

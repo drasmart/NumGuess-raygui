@@ -41,7 +41,7 @@ namespace Game {
             },
             .preferredSizes = [](const DrawRequestIdFragment &idFrag, float mn, const DrawRequest &drawRequest2) {
                 return Vector2 {
-                    mn - (float)GuiScale::getRawStyle().scrollBarWidth.listView - 1,
+                    mn - (float)GuiScale::getRawStyle().scrollBarWidth.listView,
                     GuessRangeBar::getHeight(drawRequest2.scale())
                     + 2 * (GuessRangeBarFrameThickness + GuessRangeBarFramePadding),
                 };
@@ -70,7 +70,27 @@ namespace Game {
     }
 
     static void drawTextScrollPanel(Root &root, const DrawRequest &drawRequest) {
-
+        const float scrollBarPadding = (float)GuiScale::getRawStyle().scrollBarWidth.listView;
+        const float rowHeight = Label { "dbqp", GetFontDefault() }.estimatedSize(drawRequest.scale()).y;
+        if (root.scrollToBottom) {
+            const float t = (
+                drawRequest.rectangle.height
+                - rowHeight
+                - scrollBarPadding
+                - MainFrameInset
+                - getInputPanelHeight(drawRequest)
+            );
+            const float tx = t * drawRequest.scale();
+            const float q = root.textScroll.y + (
+                (float)root.chatLog.size() * (rowHeight + MainFrameInset)
+                + MainFrameInset
+                + RAYGUI_WINDOWBOX_STATUSBAR_HEIGHT / GuiScale::guiScale
+                ) * drawRequest.scale();
+            if (q > tx) {
+                root.textScroll.y += tx - q;
+            }
+            root.scrollToBottom = false;
+        }
         DirectionalBox {
             .title = "Chat log",
             .direction = { 0, 1 },
@@ -81,10 +101,10 @@ namespace Game {
             .keys = [](size_t x) {
                 return (int)(x);
             },
-            .preferredSizes = [](const DrawRequestIdFragment &idFrag, float mn, const DrawRequest &drawRequest2) {
+            .preferredSizes = [scrollBarPadding, rowHeight](const DrawRequestIdFragment &idFrag, float mn, const DrawRequest &drawRequest2) {
                 return Vector2 {
-                    mn - (float)GuiScale::getRawStyle().scrollBarWidth.listView - 1,
-                    Label { "dbqp", GetFontDefault() }.estimatedSize(drawRequest2.scale()).y,
+                    mn - scrollBarPadding,
+                    rowHeight,
                 };
             },
             .drawers = [&root](const DrawRequestIdFragment &idFrag, const DrawRequest &btnReq) {
@@ -144,6 +164,7 @@ namespace Game {
                         root.say("Nice to meet you, " + name + ".");
                         root.engine.setName(name);
                         senderDrawRequest.dropFocus();
+                        root.onNameSet(name);
                     },
                 }.toDrawable()
                 ->padding(MainFrameInset)
@@ -156,7 +177,6 @@ namespace Game {
                     [&root](const DrawRequest &senderDrawRequest) {
                         std::cout << "BTN clicked!" << std::endl;
                         root.say("Challenge accepted!");
-                        root.num = root.engine.data.sessions.back().maxValue;
                         root.engine.startNewGame();
                         senderDrawRequest.dropFocus();
                     },
@@ -185,7 +205,9 @@ namespace Game {
                             : maxValue)
                         << std::endl;
 
-                        if (!root.num) {
+                        if (!(input == ExpectedInput::Guess
+                            ? root.num
+                            : maxValue)) {
                             return;
                         }
                         if (input == ExpectedInput::MaxValue) {

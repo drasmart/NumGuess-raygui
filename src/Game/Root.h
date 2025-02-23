@@ -8,10 +8,12 @@
 #include <Engine.h>
 
 #include "IDrawable.h"
+#include <functional>
 
 namespace Game {
 
 struct Root : UI::IDrawable {
+    std::function<void(const std::string &)> onNameSet;
     Engine engine;
     std::vector<std::string> chatLog { "Welcome, adventurer!" };
     Vector2 textScroll { 0, 0 };

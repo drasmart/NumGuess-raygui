@@ -34,7 +34,13 @@ namespace Game {
     }
 
     void Engine::startNewGame() {
-        data.sessions.emplace_back();
+        if (!data.sessions.empty()) {
+            const int maxValueCopy = data.sessions.back().maxValue;
+            data.sessions.emplace_back();
+            data.sessions.back().maxValue = maxValueCopy;
+        } else {
+            data.sessions.emplace_back();
+        }
     }
 
     void Engine::setMaxValue(const NumType maxValue) {
