@@ -72,11 +72,13 @@ std::unique_ptr<IDrawable> IDrawable::interactable(bool interactable) {
     });
 }
 
+bool IDrawable::debugFocus = false;;
+
 std::unique_ptr<IDrawable> IDrawable::focusable(bool enabled) {
     return std::make_unique<FuncDrawable>([this, enabled](const DrawRequest &drawRequest) {
         const bool focused = drawRequest.checkFocus(enabled);
         this->interactable(enabled)->drawAt(drawRequest);
-        if (focused) {
+        if (debugFocus && focused) {
             AimReticle().drawAt(drawRequest.child("focus-reticle"));
         }
     });

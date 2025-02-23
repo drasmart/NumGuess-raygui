@@ -23,6 +23,8 @@ struct IDrawable {
         return padding(Rectangle { inset, inset, inset, inset });
     }
     std::unique_ptr<IDrawable> filled(Color color);
+
+    static bool debugFocus;
 };
 
 } // UI
