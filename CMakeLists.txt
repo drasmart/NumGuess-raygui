@@ -32,4 +32,9 @@ file(GLOB SRC_FILES
 message(STATUS "SRC_FILES = ${SRC_FILES}")
 add_executable(NumGuess ${SRC_FILES})
 
-target_link_libraries(NumGuess raylib raygui)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release" AND MINGW)
+    target_link_libraries(NumGuess raylib raygui -static-libgcc -static-libstdc++ -static)
+else ()
+    target_link_libraries(NumGuess raylib raygui)
+endif ()
